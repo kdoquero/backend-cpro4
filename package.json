@@ -1,0 +1,33 @@
+{
+  "name": "backend-node",
+  "version": "1.0.0",
+  "description": "backend to gamestore",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js",
+    "mysql-start": "sudo docker-compose up",
+    "mysql-stop": "sudo docker-compose down",
+    "mysql-connect": "sudo docker-compose exec db mysql -u admin -p",
+    "bash": "sudo docker-compose exec db bash",
+    "migrate": "sequelize db:migrate",
+    "migrate:undo": "sequelize db:migrate:undo:all",
+    "seed": "sequelize db:seed:all",
+    "seed:undo": "sequelize db:seed:undo:all",
+    "backup": "sudo docker-compose exec db bash  -c 'mysqldump --user admin -p instagram_development > /home/dumps/backup.$(date +%Y%m%d_%H%M%S).sql'",
+    "doc": "documentation build index.js -f html -o docs"
+  },
+  "author": "kdoquero",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^3.0.3",
+    "body-parser": "^1.18.3",
+    "cookie-parser": "^1.4.3",
+    "dotenv": "^6.1.0",
+    "express": "^4.16.4",
+    "jsonwebtoken": "^8.3.0",
+    "mysql2": "^1.6.4",
+    "random-sentence": "^1.0.4",
+    "sequelize": "^4.41.2"
+  }
+}
