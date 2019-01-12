@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     isAdmin: DataTypes.BOOLEAN
   }, {});
   Client.associate = function(models) {
-    // associations can be defined here
+    Client.hasOne(models.ShoppingCart,{foreignKey:"clientId",foreignKeyConstraint:true})
   };
   return Client;
 };
