@@ -12,7 +12,7 @@
 *.xml
 *.env
 *.sql
-*.yml
+docker-compose.yml
 *.backup.*
 .DS_Store
 .idea
