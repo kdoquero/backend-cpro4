@@ -1,0 +1,35 @@
+'use strict';
+let models = require("../models");
+module.exports = {
+  up: (queryInterface, Sequelize) => {
+    let toBuys = [];
+    return models.ShoppingCart.findAll().then(shoppingCart => {
+      return models.Product.findAll().then(product => {
+        for (let index = 0; index < shoppingCart.length; index++) {
+          var random = product[Math.floor(Math.random() * product.length)]
+          toBuys.push({
+            idShoppingCart: shoppingCart[index].id,
+            idProduct: random.id,
+            qty: Math.floor(Math.random() * Math.floor(10))
+          })
+
+        }
+      return queryInterface.bulkInsert('toBuy', toBuys, {})
+
+      })
+
+    })
+  },
+
+  down: (queryInterface, Sequelize) => {
+    /*
+      Add reverting commands here.
+      Return a promise to correctly handle asynchronicity.
+
+      Example:
+      return queryInterface.bulkDelete('People', null, {});
+    */
+   return queryInterface.bulkDelete('toBuy', null, {});
+
+  }
+};

@@ -1,0 +1,33 @@
+'use strict';
+var randomSentence = require('random-sentence');
+module.exports = {
+  up: (queryInterface, Sequelize) => {
+    let toBuy =  [];
+    console.log("product");
+    
+      for (let index = 0; index < 100; index++) {
+        toBuy.push({
+          name: randomSentence({ min: 4, max: 9 }),
+          price:Math.floor(Math.random() * Math.floor(70))
+
+        })
+
+
+      }
+      console.log(toBuy);
+      
+      return queryInterface.bulkInsert('Products', toBuy, {})
+  },
+
+  down: (queryInterface, Sequelize) => {
+    /*
+      Add reverting commands here.
+      Return a promise to correctly handle asynchronicity.
+
+      Example:
+      return queryInterface.bulkDelete('People', null, {});
+    */
+   return queryInterface.bulkDelete('Products', null, {});
+
+  }
+};

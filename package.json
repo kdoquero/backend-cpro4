@@ -14,7 +14,7 @@
     "migrate:undo": "sequelize db:migrate:undo:all",
     "seed": "sequelize db:seed:all",
     "seed:undo": "sequelize db:seed:undo:all",
-    "backup": "sudo docker-compose exec db bash  -c 'mysqldump --user adminGameStore -p instagram_development > /home/dumps/backup.$(date +%Y%m%d_%H%M%S).sql'",
+    "backup": "sudo docker-compose exec db bash  -c 'mysqldump --user adminGameStore -p gamestore_development > /home/dumps/backup.$(date +%Y%m%d_%H%M%S).sql'",
     "doc": "documentation build index.js -f html -o docs"
   },
   "author": "kdoquero",
