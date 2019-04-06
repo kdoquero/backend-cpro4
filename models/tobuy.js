@@ -1,8 +1,15 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const toBuy = sequelize.define('toBuy', {
-    idProduct: DataTypes.INTEGER,
-    idShoppingCart: DataTypes.INTEGER,
+    idProduct:{
+      primaryKey: true,
+      type: DataTypes.INTEGER,
+      
+    },
+    idShoppingCart:{
+      primaryKey: true,
+      type: DataTypes.INTEGER
+    } ,
     qty: DataTypes.INTEGER
   }, {});
   toBuy.associate = function(models) {

@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Client.associate = function(models) {
     Client.hasOne(models.ShoppingCart,{foreignKey:"clientId",foreignKeyConstraint:false,onDelete: 'CASCADE'})
+    // associations can be defined here
   };
   return Client;
 };

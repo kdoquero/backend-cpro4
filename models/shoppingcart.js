@@ -10,9 +10,11 @@ module.exports = (sequelize, DataTypes) => {
     clientId:DataTypes.INTEGER
   }, {});
   ShoppingCart.associate = function(models) {
-    ShoppingCart.belongsTo(models.Client)
-    //ShoppingCart.hasMany(models.Product,{through: models.toBuy,foreignKey: "idShoppingCart",onDelete: 'CASCADE'})
-
+    ShoppingCart.belongsTo(models.Client,{
+      foreignKey: 'clientId'
+    })
+    ShoppingCart.hasMany(models.Product,{foreignKey: "id",targetKey: 'idProduct',onDelete: 'CASCADE'})
+    ShoppingCart.hasMany(models.toBuy,{as: 'addToBuys',foreignKey: "idShoppingCart",targetKey: 'id',onDelete: 'CASCADE'})
   };
   return ShoppingCart;
 };

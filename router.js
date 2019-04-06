@@ -5,6 +5,7 @@ var ProductController = require("./controllers/ProductController");
 var AuthMiddleware = require('./middlewares/authMiddleware');
 var AuthController = require('./controllers/AuthController');
 var AdminMiddleware = require('./middlewares/adminMiddleware')
+var OwnerMiddleware = require('./middlewares/ownerMiddleware')
 
 var router = express.Router();
 router.get('/', function (req, res) {
@@ -18,7 +19,7 @@ router.get('/test', function (req, res) {
 
 //Routeur crud Client;
 router.get("/clients",AuthMiddleware,AdminMiddleware,ClientController.getAll);
-router.get("/clients/:id",AuthMiddleware,ClientController.getById);
+router.get("/clients/:id",AuthMiddleware,OwnerMiddleware,ClientController.getById);
 router.post("/clients",ClientController.register);
 router.delete("/clients",ClientController.delete);
 

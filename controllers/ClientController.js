@@ -25,12 +25,15 @@ class UserController {
      * @param {serverResponse} res 
      */
     static getById(req, res) {
-        models.Client.findByPk(req.params.id).then(user => {
+        models.Client.findByPk(req.params.id).then(client => {
             models.ShoppingCart.findOne( {where: {
                 clientId: req.params.id
-            }}).then(shoppingCart=>{
-                
-                res.status(200).send({user: user,shoppingCart:shoppingCart})
+            },include: "addToBuys"
+        }).then(shoppingCart=>{
+                delete client.dataValues.password;
+                console.log(shoppingCart,client);
+
+                    res.status(200).send({client: client,shoppingCart:shoppingCart})
             })
             
         })

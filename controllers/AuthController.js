@@ -10,7 +10,7 @@ let models = require("../models");
 
 class AuthController {
     /**
-     * Log in the user
+     * Log in the client
      * @param {incomingMessage} req 
      * @param {serverResponse} res 
      */
@@ -21,11 +21,11 @@ class AuthController {
             where: {
                 email: email
             }
-        }).then(user=>{
-            bcrypt.compare(password,user.password).then(resp =>{
+        }).then(client=>{
+            bcrypt.compare(password,client.password).then(resp =>{
                 if (resp) {
                     
-                    const payload = {id : user.id,isAdmin : user.isAdmin}
+                    const payload = {id : client.id,isAdmin : client.isAdmin}
                     const secret = process.env.JWT_SECRET
                     const expiresIn = 48*60*60 // 4h
                     const token = jwt.sign(payload, secret, { expiresIn: expiresIn })
@@ -46,7 +46,7 @@ class AuthController {
             })
         }).catch(error => {
             res.status(404).json({
-                message: "the user doesn't exist",
+                message: "the client doesn't exist",
                 error: error
             })
         })
@@ -54,7 +54,7 @@ class AuthController {
         //res.status(200).send({endpoint:"AuthController.login"})
     }
       /**
-     * Log out the user
+     * Log out the client
      * @param {incomingMessage} req 
      * @param {serverResponse} res 
      */
@@ -62,6 +62,7 @@ class AuthController {
         res.clearCookie('access_token');
         res.status(200).send("logged out")
     }
+    
 }
 
 module.exports = AuthController;
