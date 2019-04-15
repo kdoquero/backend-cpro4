@@ -25,7 +25,7 @@
     "cookie-parser": "^1.4.3",
     "dotenv": "^6.1.0",
     "express": "^4.16.4",
-    "jsonwebtoken": "^8.3.0",
+    "jsonwebtoken": "^8.5.1",
     "mysql2": "^1.6.4",
     "random-sentence": "^1.0.4",
     "sequelize": "^4.41.2"

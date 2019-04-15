@@ -7,7 +7,7 @@ var AuthController = require('./controllers/AuthController');
 var AdminMiddleware = require('./middlewares/adminMiddleware')
 var OwnerMiddleware = require('./middlewares/ownerMiddleware')
 
-var router = express.Router();
+var router = express.Router();var router = express.Router();
 router.get('/', function (req, res) {
     res.send("welcome");
 })
