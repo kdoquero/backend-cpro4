@@ -1,7 +1,9 @@
 
 var jwt = require('jsonwebtoken');
 function authMiddleware(req, res, next) {
-    var token = req.body.token || req.query.token || req.headers['access_token'] || req.cookies.access_token;
+    console.log(req.headers);
+    
+    var token = req.body.token || req.query.token || req.headers['access_token'] || req.headers['authorization'] || req.cookies.access_token;
     if (token) {
     
         // verifies secret and checks exp

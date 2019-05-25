@@ -2,7 +2,9 @@
 const bcrypt = require('bcrypt');
 const models = require("../models");
 const fs = require('fs')
-const saltRounds = process.env.SALT_ROUND
+const saltRounds = process.env.SALT_ROUND;
+const crypto = require("crypto-random-string")
+const VerificationTokenController = require("./VerificationTokenController")
 //const salt = process.env.BCRYPT_SALT
 /**
  * Controller responsible of the user
@@ -49,7 +51,9 @@ class UserController {
         const password = req.body.password;
         const email = req.body.email;
         const isAdmin = req.body.isAdmin
-
+        if (!isAdmin) {
+            isAdmin = false
+        }
         bcrypt.hash(password, parseInt(saltRounds), function (err, hash) {
             models.Client.findOne({
                 where: {
@@ -73,13 +77,29 @@ class UserController {
                             total: 0,
                             clientId : user.id
                         }).then(cart =>{
-                            console.log(cart ,"new shopping cart");
                             
+                            models.VerificationToken.create({
+                                clientId: user.id,
+                                token: crypto({length:16})
+                              }).then((result) => {
+                                  console.log("verif",user.id,token,result);
+                                  
+                              VerificationTokenController.prepareVerificationEmail(user.email, result.token).then(value=>{
+                                res.status(200).send({ userId: user.id,message: `${user.email} account created successfully`});
+                              });
+                                
+                                 
+                              })
+                              .catch((error) => {
+                                 res.status(500).send({message:"Verification token not created",error:error});
+                              });
+                        }).catch(error=>{
+                            res.status(500).send({message:"Cart error creation",error:error});
                         })
-
-                        res.status(200).send({ userId: user.id });
+                       
+                        //res.status(200).send({ userId: user.id });
                     }).catch(error => {
-                        res.status(500).send({ error: "cannot add user" });
+                        res.status(500).send({ message: "cannot add user",error:error });
 
                     })
                 }
@@ -100,7 +120,10 @@ class UserController {
      * @param {serverResponse} res 
      */
     static replace(req, res) {
+        let newClient = req.body
+       
         res.status(200).send({ endpoint: "UserController.replace" })
+        
     }
     /**
      * insert a new data in the user object

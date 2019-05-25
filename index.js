@@ -15,14 +15,15 @@ if (process.env.NODE_ENV !== 'production') {
 //let models = require("./models");
 var router = require('./router');
 app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header("Access-Control-Allow-Origin", "http://localhost:4200");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept,Authorization");
+    res.header('Access-Control-Allow-Credentials', true)
     next();
   });
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use('/',router)
+app.use('/api',router)
 var httpsServer = https.createServer(credentials, app);
 var httpServer = http.createServer(app)
 httpsServer.listen(8443,function (params) {

@@ -1,9 +1,8 @@
 
 var jwt  = require('jsonwebtoken');
-
 const bcrypt = require('bcrypt');
-
 let models = require("../models");
+
 /**
  * Controller responsible of auth
  */
@@ -29,11 +28,11 @@ class AuthController {
                     const secret = process.env.JWT_SECRET
                     const expiresIn = 48*60*60 // 4h
                     const token = jwt.sign(payload, secret, { expiresIn: expiresIn })
-                    res.cookie("access_token", token,{ expires: new Date(Date.now() + 900000),sameSite :true})
-                    res.status(200).send({ "success" : true})
+                    res.cookie("access_token", token,{secure:false, expires: new Date(Date.now() + 900000),sameSite :false})
+                    res.status(200).send({ "success" : true,id:client.id,token:token})
                    
                 } else {
-                    res.status(500).json({
+                    res.status(403).json({
                         message: "wrong password",
                     });
                 }

@@ -1,6 +1,7 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
+    
     return queryInterface.createTable('Clients', {
       id: {
         allowNull: false,
@@ -24,6 +25,14 @@ module.exports = {
         allowNull: false
       },
       isAdmin: {
+        type:Sequelize.BOOLEAN,
+        defaultValue :false
+      },
+      avatar: {
+        type:Sequelize.STRING,
+        defaultValue :false
+      },
+      isVerified: {
         type:Sequelize.BOOLEAN,
         defaultValue :false
       },
