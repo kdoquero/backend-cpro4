@@ -28,16 +28,17 @@ class UserController {
      */
     static getById(req, res) {
         models.Client.findByPk(req.params.id).then(client => {
-            models.ShoppingCart.findOne( {where: {
-                clientId: req.params.id
-            },include: "addToBuys"
-        }).then(shoppingCart=>{
+            models.ShoppingCart.findOne({
+                where: {
+                    clientId: req.params.id
+                }, include: "addToBuys"
+            }).then(shoppingCart => {
                 delete client.dataValues.password;
-                console.log(shoppingCart,client);
+                console.log(shoppingCart, client);
 
-                    res.status(200).send({client: client,shoppingCart:shoppingCart})
+                res.status(200).send({ client: client, shoppingCart: shoppingCart })
             })
-            
+
         })
     }
 
@@ -50,12 +51,14 @@ class UserController {
         const name = req.body.name;
         const password = req.body.password;
         const email = req.body.email;
-        const isAdmin = req.body.isAdmin
+        let isAdmin = req.body.isAdmin;
+        const token = crypto({ length: 16 }).toString();
         if (!isAdmin) {
             isAdmin = false
         }
-        bcrypt.hash(password, parseInt(saltRounds), function (err, hash) {
-            models.Client.findOne({
+        bcrypt.hash(password, parseInt(saltRounds), (err, hash) => {
+                if (err) return res.send({message:"password not created",error:err})
+          return models.Client.findOne({
                 where: {
                     email: email
                 }
@@ -65,7 +68,7 @@ class UserController {
                         message: "email already exist",
                     })
                 } else {
-                    models.Client.create(
+                    return models.Client.create(
                         {
                             name: name,
                             password: hash,
@@ -73,46 +76,35 @@ class UserController {
                             isAdmin: isAdmin
                         }
                     ).then(user => {
-                        models.ShoppingCart.create({
+                        return models.ShoppingCart.create({
                             total: 0,
-                            clientId : user.id
-                        }).then(cart =>{
-                            
-                            models.VerificationToken.create({
-                                clientId: user.id,
-                                token: crypto({length:16})
-                              }).then((result) => {
-                                  console.log("verif",user.id,token,result);
-                                  
-                              VerificationTokenController.prepareVerificationEmail(user.email, result.token).then(value=>{
-                                res.status(200).send({ userId: user.id,message: `${user.email} account created successfully`});
-                              });
-                                
-                                 
-                              })
-                              .catch((error) => {
-                                 res.status(500).send({message:"Verification token not created",error:error});
-                              });
-                        }).catch(error=>{
-                            res.status(500).send({message:"Cart error creation",error:error});
-                        })
-                       
-                        //res.status(200).send({ userId: user.id });
-                    }).catch(error => {
-                        res.status(500).send({ message: "cannot add user",error:error });
+                            clientId: user.id
+                        }).then(cart => {
+                            //console.log("cart", cart);
 
+                            return models.VerificationToken.create({
+                                clientId: user.id,
+                                token: token
+                            }).then(result => {
+                                //console.log("verif", user.id, token, result);
+                                //       Ve
+                                VerificationTokenController.prepareVerificationEmail(res,email, result.token).then(value=>{
+                                     res.status(200).send({ userId: user.id,message: `${user.email} account created successfully`});
+                                })
+                            }).catch((error) => {
+                                res.status(500).send({ message: "lol token not created", error: error });
+                            });
+
+
+                        }).catch((error) => {
+                            res.status(500).send({ message: "cart not created", error: error });
+                        });
+                    }).catch(error => {
+                        res.status(500).send({ message: "user not created", error: error });
                     })
                 }
-
-            }).catch(error => {
-                res.status(500).send({ error: "cannot verify user" });
-
             })
-
-
         })
-
-
     }
     /**
      * replace all the data of one user by his id
@@ -121,9 +113,9 @@ class UserController {
      */
     static replace(req, res) {
         let newClient = req.body
-       
+
         res.status(200).send({ endpoint: "UserController.replace" })
-        
+
     }
     /**
      * insert a new data in the user object

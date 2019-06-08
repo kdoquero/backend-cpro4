@@ -26,7 +26,7 @@ class AuthController {
                     
                     const payload = {id : client.id,isAdmin : client.isAdmin}
                     const secret = process.env.JWT_SECRET
-                    const expiresIn = 48*60*60 // 4h
+                    const expiresIn = "7d"; // 4h
                     const token = jwt.sign(payload, secret, { expiresIn: expiresIn })
                     res.cookie("access_token", token,{secure:false, expires: new Date(Date.now() + 900000),sameSite :false})
                     res.status(200).send({ "success" : true,id:client.id,token:token})
@@ -59,7 +59,7 @@ class AuthController {
      */
     static logout(req,res) {
         res.clearCookie('access_token');
-        res.status(200).send("logged out")
+        res.status(200).send({message:"logged out"})
     }
     
 }

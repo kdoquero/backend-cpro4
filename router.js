@@ -7,7 +7,7 @@ var AuthController = require('./controllers/AuthController');
 var AdminMiddleware = require('./middlewares/adminMiddleware')
 var OwnerMiddleware = require('./middlewares/ownerMiddleware')
 var VerificationTokenController = require('./controllers/VerificationTokenController')
-var router = express.Router();var router = express.Router();
+var router = express.Router();
 router.get('/', function (req, res) {
     res.send("welcome");
 })
@@ -29,7 +29,7 @@ router.delete("/clients",ClientController.delete);
 
 //Router auth;
 router.post("/auth/login", AuthController.login)
-router.post("/auth/logout", AuthMiddleware, AuthController.logout)
+router.get("/auth/logout", AuthMiddleware, AuthController.logout)
 
 
 //Router crud Products;

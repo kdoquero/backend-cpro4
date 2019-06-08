@@ -16,6 +16,7 @@ class ProductController {
              res.status(200).send(user)
          })
      }
+     
 }
 
 module.exports = ProductController;
