@@ -27,17 +27,12 @@ class UserController {
      * @param {serverResponse} res 
      */
     static getById(req, res) {
-        models.Client.findByPk(req.params.id).then(client => {
-            models.ShoppingCart.findOne({
-                where: {
-                    clientId: req.params.id
-                }, include: "addToBuys"
-            }).then(shoppingCart => {
-                delete client.dataValues.password;
-                console.log(shoppingCart, client);
-
-                res.status(200).send({ client: client, shoppingCart: shoppingCart })
-            })
+        models.Client.findByPk(req.params.id,{include:[{model:models.ShoppingCart,include:[{model:models.toBuy,as :"addToBuys",include:models.Product}]}]}).then(client => {
+            delete client.dataValues["password"];
+            console.log("client",client,"client");
+            
+                res.status(200).send(client)
+            
 
         })
     }
@@ -80,22 +75,16 @@ class UserController {
                             total: 0,
                             clientId: user.id
                         }).then(cart => {
-                            //console.log("cart", cart);
-
                             return models.VerificationToken.create({
                                 clientId: user.id,
                                 token: token
                             }).then(result => {
-                                //console.log("verif", user.id, token, result);
-                                //       Ve
                                 VerificationTokenController.prepareVerificationEmail(res,email, result.token).then(value=>{
                                      res.status(200).send({ userId: user.id,message: `${user.email} account created successfully`});
                                 })
                             }).catch((error) => {
                                 res.status(500).send({ message: "lol token not created", error: error });
                             });
-
-
                         }).catch((error) => {
                             res.status(500).send({ message: "cart not created", error: error });
                         });
@@ -112,10 +101,9 @@ class UserController {
      * @param {serverResponse} res 
      */
     static replace(req, res) {
-        let newClient = req.body
-
-        res.status(200).send({ endpoint: "UserController.replace" })
-
+      
+            res.status(200).send({ endpoint: "UserController.replace",user:updated })
+     
     }
     /**
      * insert a new data in the user object
@@ -123,7 +111,14 @@ class UserController {
      * @param {serverResponse} res 
      */
     static patch(req, res) {
-        res.status(200).send({ endpoint: "UserController.patch" })
+        let id = req.body.id;
+        let client =req.body;
+        models.Client.update({name:client.name,avatar:client.avatar},{where:{id:id}}).then(updated=>{
+            console.log(updated)
+            res.status(200).send({ endpoint: "UserController.replace",user:updated })
+        }).catch(error=>{
+            res.status(404).send({ endpoint: "UserController.replace" })
+        })
     }
     /**
      * delete one user by his id

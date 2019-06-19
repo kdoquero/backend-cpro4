@@ -10,9 +10,11 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       type: DataTypes.INTEGER
     } ,
-    qty: DataTypes.INTEGER
+    qty: DataTypes.INTEGER,
+    idGiantBomb: DataTypes.STRING
   }, {});
   toBuy.associate = function(models) {
+    toBuy.hasMany(models.Product,{foreignKey: "id",targetKey: 'idProduct',onDelete: 'CASCADE'})
     // associations can be defined here
   };
   return toBuy;

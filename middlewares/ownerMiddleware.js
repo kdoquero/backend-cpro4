@@ -2,7 +2,7 @@
 function ownerMiddleware(req, res, next) {
     console.log(req.decoded,req.params.id);
     
-    if (req.decoded.id ==req.params.id || req.decoded.isAdmin ===true) {
+    if (req.decoded.id ==req.params.id || req.decoded.isAdmin ===true || req.decoded.id == req.body.id) {
          next();
     }else {
         return res.status(403).send({
