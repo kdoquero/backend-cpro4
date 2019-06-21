@@ -37,7 +37,7 @@ router.get("/auth/logout", AuthMiddleware, AuthController.logout)
 //Router crud Products;
 router.get("/products",ProductController.getAll);
 router.get("/products/:id",ProductController.getById);
-router.post("/products",ProductController.addProduct2);
+router.post("/products",ProductController.manageProduct);
 
 //Router crud ShoppingCart;
 router.get("/cart/:id",ShoppingCartController.getShoppingCart);
